@@ -1,0 +1,605 @@
+body {
+    background-color: #23232c;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+footer {
+    color: aliceblue;
+    margin-top: 350px;
+    font-size: 19px;
+}
+
+nav {
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 8vh;
+    background-color: #000000;
+}
+
+.logo {
+    width: 6%;
+    margin-right: 80%;
+}
+
+.hambur {
+    display: none;
+    cursor: pointer;
+    border: none;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+}
+
+.hambur span {
+    display: block;
+    background-color: #f3f3f3;
+    height: 3px;
+    width: 28px;
+    margin: 10px auto;
+    border-radius: 2px;
+}
+
+header {
+    font-size: 62.5%;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.enlaces-menu {
+    display: flex;
+    margin-right: 20px;
+    margin: 0 10px;
+    padding: 0;
+}
+
+.enlaces-menu li {
+    padding: 0 40px;
+    list-style-type: none;
+}
+
+.enlaces-menu li a {
+    text-decoration: none;
+    font-size: 18px;
+    color: #f3f3f3;
+}
+
+.enlaces-menu li a:hover {
+    color: RGB(230 20 230);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+.pregunta {
+    width: 640px;
+}
+
+.pregunta H2 {
+    text-wrap: balance;
+}
+
+#containerTrivia {
+    width: 648px;
+    height: 42px;
+    border-radius: 10px;
+    background: white;
+    border: 100px solid white;
+    color: #e614e6;
+    font-size: 21px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    word-wrap: break-word;
+    max-width: 100%;
+    padding: 1% 16%;
+    text-wrap: balance;
+}
+
+.btnOpcionTrivia {
+    width: 648px;
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    font-size: 26px;
+    background-color: #9b9b9a68;
+    color: #3FB1FF;
+    border: 0;
+    border-radius: 10px;
+    text-align: center;
+    height: 60px;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+}
+
+.btnOpcionTrivia:hover {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    background-color: rgba(13, 110, 253, 0.8);
+    transform: translateY(3px);
+    color: #fff;
+}
+
+#btnRespuestaTrivia {
+    width: calc(50% - 20%);
+    background-color: #3FB1FF;
+    color: white;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    height: 53px;
+    margin-top: 1px;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+#btnRespuestaTrivia:hover {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    background-color: azure;
+    transform: translateY(3px);
+    color: #e614e6;
+}
+
+* {
+    transition: all 0.3s;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #111111;
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .6s;
+    --transform: translateY(-100vh);
+    --transition: transform .8s;
+}
+
+.modal--show {
+    opacity: 1;
+    pointer-events: unset;
+
+    --transform: translateY(0);
+}
+
+.modal_container {
+    margin: auto;
+    width: 90%;
+    max-width: 600px;
+    max-height: 100%;
+    background-color: #43434359;
+    color: #f3f3f3;
+    font-size: 11px;
+    border-radius: 6px;
+    padding: 3em 2.5em;
+    display: grid;
+    gap: 0.2px;
+    place-items: center;
+    grid-auto-columns: 100%;
+    transform: var(--transform);
+    transition: var(--transition);
+}
+
+.modal_title {
+    font-size: 0.5rem;
+    margin-top: 0%;
+}
+
+.modal_paragraph {
+    margin-bottom: 1.5px;
+}
+
+.opcion_correcta {
+    font-weight: bold;
+}
+
+.modal_close {
+    text-decoration: none;
+    color: #fff;
+    background-color: #e614e6;
+    padding: 8px;
+    width: 94px;
+    border: 1px solid #23232c;
+    border-radius: 6px;
+    display: inline-block;
+    font-weight: 10;
+    font-size: 19px;
+    transition: background-color .3s;
+    height: 44px;
+}
+
+.modal_close:hover {
+    color: white;
+    background-color: rgba(13, 110, 253, 0.8);
+
+}
+
+.imagen img {
+    width: 450px;
+    height: 300px;
+}
+
+.enlaces-menu.mostrar {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: #000;
+    width: 100%;
+    top: 8vh;
+    left: 0;
+}
+
+.enlaces-menu.mostrar li {
+    padding: 10px;
+    text-align: center;
+}
+
+.porcent {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #f3f3f3;
+}
+
+.progreso-contenedor {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15%;
+}
+
+#barraProgreso {
+    flex: 1;
+}
+
+.barPorcent::-webkit-progress-bar {
+    background-color: #f3f3f3;
+}
+
+.barPorcent::-webkit-progress-value {
+    background-color: #4CAF50;
+    border-radius: 10px;
+}
+
+.barPorcent::-moz-progress-bar {
+    background-color: #4CAF50;
+    /* Color de la barra de progreso en Firefox */
+    border-radius: 10px;
+}
+
+/* Para Internet Explorer */
+.barPorcent::-ms-fill {
+    background-color: #4CAF50;
+    border-radius: 10px;
+}
+
+#barraProgreso {
+    width: 80%;
+    max-width: 500px;
+}
+
+.barPorcent {
+    width: 100%;
+    height: 20px;
+}
+
+.porcentaje {
+    margin-top: -6px;
+    margin-right: 36px;
+    font-size: 20px;
+    color: #fff;
+}
+
+.porcentaje2 {
+    margin-top: -32px;
+    margin-left: 9px;
+    font-size: 20px;
+    color: #fff;
+}
+
+.modal_resumen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #111111bd;
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modalResumen_container {
+    margin: auto;
+    width: 90%;
+    background-color: #fff;
+    max-width: 600px;
+    max-height: 100%;
+    border-radius: 6px;
+    padding: 3em 2.5em;
+    display: grid;
+    gap: 1em;
+    place-items: center;
+    grid-auto-columns: 100%;
+    font-family: sans-serif;
+}
+
+.modalResumen_title {
+    font-size: 2.5rem;
+    font-family: sans-serif;
+}
+
+.modalResumen_para {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+    color: rgba(13, 110, 253, 0.8);
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+.modalResumen_img {
+    width: 90%;
+    max-width: 300px;
+}
+
+.modalResumen_closes {
+    text-decoration: none;
+    color: #fff;
+    background-color: #e614e6;
+    padding: 1em 3em;
+    border: 1px solid #23232c;
+    border-radius: 6px;
+    display: inline-block;
+    font-weight: 300px;
+    font-size: 1rem;
+}
+
+.modalResumen_closes:hover {
+    color: white;
+    background-color: rgba(13, 110, 253, 0.8);
+    padding: 1.2em 3.2em;
+}
+
+.modalResumen--show {
+    opacity: 1;
+    pointer-events: unset;
+}
+
+#modalResumenMensaje {
+    font-weight: bold;
+    font-size: 18px;
+    color: rgba(13, 110, 253, 0.8);
+    font-family: sans-serif;
+}
+
+#timer {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+* {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    text-align: center;
+}
+
+#volver {
+    position: absolute;
+    top: 520px;
+    left: 300px;
+    height: 100%;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+#btnVolver {
+    text-decoration: none;
+    color: #ffffff5a;
+}
+
+#btnVolver i.fa-solid {
+    font-size: 40px;
+}
+
+#btnVolver:hover {
+    color: #e614e6;
+}
+
+#correct i.fa-solid {
+    font-size: 1.8rem;
+}
+
+
+@media screen and (max-width: 768px) {
+    body {
+        padding-top: 8vh;
+    }
+
+    .enlaces-menu {
+        display: none;
+    }
+
+    .hambur {
+        display: block;
+    }
+
+    #volver {
+        margin-left: -73vw;
+        margin-top: 11.2vw;
+    }
+
+    #btnVolver {
+        font-size: 15px;
+    }
+
+    #containerTrivia {
+        width: 100%;
+        height: 42px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        word-wrap: break-word;
+        max-width: 100%;
+        margin-top: 0vw;
+        padding: 0;
+        flex-direction: row;
+    }
+
+    .pregunta {
+        width: 100%;
+        font-size: 26px;
+        line-height: 1.2
+    }
+
+    .pregunta h2 {
+        font-size: 18px;
+    }
+
+
+    .btnOpcionTrivia {
+        width: 100%;
+        font-size: 20px;
+        height: 100%;
+        max-height: 100%s;
+        margin-top: 2%;
+        max-width: 100%;
+        padding: 8.5px;
+        font-size: 13.5px;
+    }
+
+    #btnRespuestaTrivia {
+        width: 27%;
+        font-size: 18px;
+        height: 100%;
+        margin-top: 9px;
+        padding: 8.5px;
+    }
+
+    .imagen img {
+        width: 220px;
+        height: 200px;
+    }
+
+    .modal_container {
+        width: 80%;
+        max-width: 80%;
+        padding: 3em 1.5em;
+    }
+
+    .modal_title {
+        font-size: 1rem;
+    }
+
+    #correct {
+        font-size: 1.6rem;
+    }
+
+    .modal_paragraph {
+        font-size: 12px;
+    }
+
+    .imagen img {
+        width: 30%;
+        height: auto;
+    }
+
+    #porcent {
+        flex: 1;
+        max-width: 50px;
+    }
+
+    #barraProgreso {
+        flex: 3;
+        width: auto;
+    }
+
+    progress {
+        width: 100%;
+    }
+
+    .porcentaje {
+        margin-top: -50px;
+        margin-left: 58px;
+        font-size: 20px;
+        color: #fff;
+    }
+
+    .porcentaje2 {
+        margin-top: -32px;
+        margin-left: 78px;
+        font-size: 20px;
+        color: #fff;
+    }
+
+    .progreso-contenedor {
+        margin-top: 15.5vw;
+        margin-bottom: 0.7vw;
+    }
+
+    #barraProgreso {
+        width: 100%;
+    }
+
+    .modal {
+        align-items: flex-start;
+        max-width: 100%;
+        margin-top: 2%;
+    }
+
+    .modal_container {
+        width: 100%;
+        max-width: 100%;
+        padding: 2em 1.5em;
+    }
+
+
+    .imagen img {
+        width: 100%;
+        height: auto;
+    }
+
+    .modal_close {
+        font-size: 1rem;
+    }
+
+    .modal_resumen {
+        align-items: flex-start;
+        margin-top: 1vh;
+        padding: 20px;
+        width: 100%;
+        max-width: 100%;
+        padding: 20px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    #barraProgreso {
+        left: calc(50% + (500px - 346px) / 2);
+    }
+}

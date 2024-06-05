@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilos/ruleta.css">
+    <link rel="icon" type="image/x-icon" href="imagen/icono.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/01d0c5d349.js" crossorigin="anonymous"></script>
+    <script src="js/ruleta.js" defer></script>
+    <script src="js/helpers.js"></script>
+    <title>Ruleta Trivia</title>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="#">
+                <img class="logo" src="imagen/champions.png" alt="logo Alonda">
+            </a>
+            <ul class="enlaces-menu">
+                <li><a href="https://menu.alondralearn.com/">Ir a Atrás</a></li>
+            </ul>
+            <button class="hambur" type="button">
+                <span class="br-1"></span>
+                <span class="br-2"></span>
+                <span class="br-3"></span>
+            </button>
+        </nav>
+    </header>
+    <h1 id="titulo">Trivia Alondra Musical</h1>
+    <div id="container">
+        <div id="marcador">
+            <div id="cartelGanador">
+                <p id="ganadorTexto">Presiona Girar para el género musical</p>
+            </div>
+        </div>
+        <div id="ruleta">
+            <div id="sortear">
+                <button id="girarBtn">
+                    Girar
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="categoria">
+        <div id="categoriaSelect" name="categoria" id="">
+            <button id="selectRock" value="Barcelona">Barcelona</button>
+            <button id="selectPop" value="ManCity">Man City</button>
+            <button id="selectKpop" value="K-pop">Milan</button>
+            <button id="selectHipHop" value="Hip-Hop">R Madrid</button>
+            <button id="selectReggae" value="Liverpool">Liverpool</button>
+            <button id="selectAlondra" value="Alond - Mix">B Munchen</button>
+        </div>
+    </div>
+    <div id="volver">
+        <a id="btnVolver" href="/"><i class="fa-solid fa-circle-chevron-left"></i></a>
+    </div>
+    <button id="seleccionarCategoria">Ingresar</button>
+
+    <section class="modal">
+        <div class="modal_container">
+            <img class="modal_img" src="imagen/logoprincipal.png" width="470" alt=" logo">
+            <h2 class="modal_title">¡Bienvenido al desafio de la Champions!</h2>
+            <p>Los gigantes de la champions están acá</p>
+            <div class="containerBtn">
+                <button onclick="mostrarRuleta()" class="modal_ruleta">Ruleta</button>
+                <button onclick="mostrarManual()" class="modal_manual">Manual</button>
+            </div>
+        </div>
+    </section>
+    <script defer src="/js/modal_index.js"></script>
+</body>
+
+</html>

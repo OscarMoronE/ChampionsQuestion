@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../estilos/trivia.css">
+  <link rel="icon" type="image/x-icon" href="../imagen/icono.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/01d0c5d349.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a href="#">
+        <img class="logo" src="../imagen/champions.png" alt="logo Alonda">
+      </a>
+      <ul class="enlaces-menu">
+        <li><a href="https://menu.alondralearn.com/">Ir al Inicio</a></li>
+      </ul>
+      <button class="hambur" type="button">
+        <span class="br-1"></span>
+        <span class="br-2"></span>
+        <span class="br-3"></span>
+      </button>
+    </nav>
+    <div class="progreso-contenedor">
+      <div id="porcent">
+        <div class="porcentaje">0</div>
+        <p class="porcentaje2">/3</p>
+      </div>
+      <div id="barraProgreso">
+        <progress class="barPorcent" value="0" max="100"></progress>
+      </div>
+    </div>
+    <audio id="soundCorrect">
+      <source src="../media/correcto.mp3" type="audio/mp3">
+    </audio>
+    <audio id="soundIncorrect">
+      <source src="../media/incorrect.mp3" type="audio/mp3">
+    </audio>
+    <div id="shake">
+      <div id="containerTrivia">
+        <% preguntas.forEach(function(pregunta) { %>
+          <div class="pregunta">
+            <h2>
+              <%= pregunta.pregunta %>
+            </h2>
+          </div>
+          <% }); %>
+      </div>
+      <div id="containerOpcionesTrivia"></div>
+      <div id="containerOpcionesTrivia2"></div>
+      <button id="btnRespuestaTrivia" onclick="continuar()">Envíar</button>
+    </div>
+    <div id="volver">
+      <a id="btnVolver" href="/"><i class="fa-solid fa-circle-chevron-left"></i></a>
+    </div>
+    <section class="modal ">
+      <div class="modal_container">
+        <h2 id="correct"></h2>
+        <h5 class="modal_title">¿Sabías que?</h5>
+
+        <% imagenReferencial.forEach(function(imagen_referencial){ %>
+          <div class="imagen">
+            <img src="<%= imagen_referencial.imagen_referencial %>" alt="Imagen Referencial">
+          </div>
+          <% }); %>
+            <% opcion_correctas.forEach(function(opcion_correcta){ %>
+              <div class="opcion_correcta">
+                <p>
+                  <b>Respuesta correcta:</b>
+                  <%= opcion_correcta.opcion_correcta %>
+                </p>
+              </div>
+              <% }); %>
+
+                <% feedbacks.forEach(function(feedback){ %>
+                  <div class="feedback">
+                    <p>
+                      <%= feedback.feedback %>
+                    </p>
+                  </div>
+                  <% }); %>
+                    <a href="#" onclick="nextPage('<%= categoria %>')" class="modal_close">Cerrar</a>
+      </div>
+    </section>
+    <script defer src="/js/modal.js"></script>
+    <script>
+      let startTime = Date.now();
+      window.addEventListener('load', function () {
+        startTime = Date.now();
+      })
+
+      let endTime = 0;
+      let acertadas = 0;
+      let progreso = 0;
+      function actualizarProgreso() {
+        const barraProgreso = document.querySelector("#barraProgreso progress");
+        barraProgreso.value = progreso;
+      }
+
+      let currentQuestionIndex = 0;
+      let selectedOption = null;
+      let respuestaCorrecta = null;
+      let isCorrect = null;
+      const btnRespuestaTrivia = document.getElementById("btnRespuestaTrivia");
+
+      function cargarOpciones(opcionCorrecta, opcionUno, opcionDos, opcionTres) {
+        respuestaCorrecta = opcionCorrecta;
+        let opciones = [];
+        // Manejar el caso de la primera pregunta
+        if (opcionUno === undefined && opcionDos === undefined && opcionTres === undefined) {
+          opciones = [
+            opcionCorrecta,
+            "<%= preguntas[0].opcion_uno %>",
+            "<%= preguntas[0].opcion_dos %>",
+            "<%= preguntas[0].opcion_tres %>"
+          ];
+        } else {
+          opciones = [
+            opcionCorrecta,
+            (opcionUno || '').trim(),
+            (opcionDos || '').trim(),
+            (opcionTres || '').trim()
+          ].filter(opcion => opcion !== '');
+        }
+
+        opciones.sort(function () {
+          return 0.5 - Math.random();
+        });
+
+        let containerOpcionesTrivia = document.getElementById("containerOpcionesTrivia");
+        let containerOpcionesTrivia2 = document.getElementById("containerOpcionesTrivia2");
+
+        containerOpcionesTrivia.innerHTML = '';
+        containerOpcionesTrivia2.innerHTML = '';
+
+        for (let i = 0; i < opciones.length; i++) {
+          let opcionDiv = document.createElement("button");
+          opcionDiv.classList.add("btnOpcionTrivia");
+          opcionDiv.innerHTML = opciones[i];
+          if (i < 2) {
+            containerOpcionesTrivia.appendChild(opcionDiv);
+          } else {
+            containerOpcionesTrivia2.appendChild(opcionDiv);
+          }
+
+          opcionDiv.addEventListener("click", handleOptionClick);
+        }
+      }
+      cargarOpciones("<%= preguntas[0].opcion_correcta %>");
+
+      function handleOptionClick(event) {
+        const opcionDiv = event.target;
+        if (selectedOption) {
+          selectedOption.style.backgroundColor = "";
+        }
+        opcionDiv.style.backgroundColor = "grey";
+        selectedOption = opcionDiv;
+        btnRespuestaTrivia.disabled = false;
+      }
+
+      function handleSeleccionarClick() {
+        if (selectedOption) {
+          isCorrect = selectedOption.textContent === respuestaCorrecta;
+          selectedOption.style.backgroundColor = isCorrect ? "green" : "red";
+
+          const opcionesTrivia = document.querySelectorAll('.btnOpcionTrivia');
+          opcionesTrivia.forEach(opcion => {
+            if (opcion !== selectedOption) {
+              opcion.disabled = true;
+            }
+            const correcto = document.getElementById("correct");
+            if (isCorrect) {
+              correcto.innerHTML = '¡Correcto!  <i class="fa-regular fa-face-laugh-beam"></i>';
+              correcto.style.color = "gold";
+            } else {
+              correcto.innerHTML = '¡Incorrecto!  <i class="fa-regular fa-face-frown"></i> ';
+              correcto.style.color = "red";
+            }
+          });
+          let progress = document.querySelector(".porcent");
+          let porcentaje = document.querySelector(".porcentaje");
+          let porcentaje2 = document.querySelector(".porcentaje2");
+          let porcenNumb = parseInt(porcentaje.textContent);
+          if (btnRespuestaTrivia) {
+            progreso += 10;
+            porcenNumb += 1;
+            porcentaje.textContent = porcenNumb;
+            actualizarProgreso();
+            btnRespuestaTrivia.disabled = true;
+          }
+          if (parseInt(porcentaje.textContent) === 5) {
+            porcentaje2.textContent = "/10";
+            porcentaje.style.right = "calc(50% + (648px - 535px) / 2)";
+          }
+          if (isCorrect) {
+            acertadas += 1;
+            confetti();
+            document.getElementById("soundCorrect").play();
+          } else {
+            document.getElementById("soundIncorrect").play();
+            let shake = document.getElementById("shake");
+            shake.classList.add('animate__animated', 'animate__shakeX');
+            shake.addEventListener('animationend', () => {
+              shake.classList.remove('animate__animated', 'animate__shakeX');
+            });
+          }
+          endTime = Date.now();
+
+          let verAcertadas = document.querySelector(".modalResumen_para");
+          let porcentajeNumero = porcentaje2.textContent.replace('/', '');
+          verAcertadas.textContent = "Acertaste " + acertadas + " de " + porcentajeNumero;
+          let mensajeUsuario = document.getElementById("modalResumenMensaje");
+          if (acertadas > 9) {
+            mensajeUsuario.textContent = "¡Felicidades! Estás haciendo un gran trabajo.";
+          } else if (acertadas > 4) {
+            mensajeUsuario.textContent = "¡Bien hecho! Estás avanzando en tu aprendizaje.";
+          } else if (acertadas > 1) {
+            mensajeUsuario.textContent = "¡Anímate! cada paso cuenta en tu aprendizaje.";
+          }
+          let verTiempo = document.getElementById("timer");
+          const tiempoTranscurrido = Math.ceil((endTime - startTime) / 1000);
+          verTiempo.textContent = "Tu tiempo de respuesta fue: " + tiempoTranscurrido + " segundos";
+        }
+      }
+
+      btnRespuestaTrivia.addEventListener("click", handleSeleccionarClick);
+      btnRespuestaTrivia.disabled = true;
+
+      let preguntasCerradas = 0; // Variable para contar el número de preguntas cerradas
+
+      function nextPage(categoria) {
+        fetch(`/trivia/${categoria}/siguiente?index=${currentQuestionIndex}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('No se encontraron más preguntas para esta categoría.');
+            }
+            return response.json();
+          })
+          .then(data => {
+            const containerTrivia = document.getElementById('containerTrivia');
+            containerTrivia.innerHTML = `
+                <div class="pregunta">
+                    <h2>${data.pregunta}</h2>
+                </div>
+            `;
+
+            const modalTitle = document.querySelector('.modal_title');
+            const modalImage = document.querySelector('.modal_container .imagen img');
+            const modalFeedback = document.querySelector('.modal_container .feedback p');
+            const opcCorrecta = document.querySelector(".opcion_correcta");
+
+
+            modalTitle.textContent = '¿Sabías que?';
+            modalImage.src = data.imagen_referencial;
+            opcCorrecta.textContent = 'Respuesta correcta: ' + data.opcion_correcta;
+            modalFeedback.textContent = data.feedback;
+
+            const containerOpcionesTrivia = document.getElementById('containerOpcionesTrivia');
+            const containerOpcionesTrivia2 = document.getElementById('containerOpcionesTrivia2');
+
+            containerOpcionesTrivia.innerHTML = '';
+            containerOpcionesTrivia2.innerHTML = '';
+
+            cargarOpciones(data.opcion_correcta, data.opcion_uno, data.opcion_dos, data.opcion_tres);
+
+            currentQuestionIndex++;
+          })
+          .catch(error => {
+            console.error('Error al obtener la próxima pregunta:', error);
+            window.location.href = '404';
+          });
+
+
+        preguntasCerradas++;
+        if (preguntasCerradas === 2) { // Si se ha cerrado el modal de pregunta por décima vez
+          const abrirResumen = document.querySelector(".modal_resumen");
+          abrirResumen.classList.add("modalResumen--show");
+        }
+      }
+
+      function continuar() {
+        if (btnRespuestaTrivia.textContent === "Continuar") {
+          const modal = document.querySelector(".modal");
+          modal.style.display = "none";
+        }
+      }
+      document.querySelector('.hambur').addEventListener('click', function () {
+        document.querySelector('.enlaces-menu').classList.toggle('mostrar');
+      });
+    </script>
+    <section class="modal_resumen">
+      <div class="modalResumen_container">
+        <h2 class="modalResumen_title">¡Resumen de aprendizaje!</h2>
+        <img class="modalResumen_img" src="../imagen/ball.png" width="370" alt="ball">
+        <p class="modalResumen_para"></p>
+        <p id="modalResumenMensaje"></p>
+        <p id="timer"></p>
+        <a href="/" class="modalResumen_closes">Salir</a>
+        <div class="">
+        </div>
+      </div>
+    </section>
+  </header>
+  <footer>
+    <h3>Champions League </h3>
+    <p>Todos los derechos reservados</p>
+  </footer>
+</body>
+
+</html>
